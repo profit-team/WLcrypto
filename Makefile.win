@@ -1,0 +1,40 @@
+# Project: WLcrypto
+# Makefile created by Dev-C++ 5.5.3
+
+CPP      = tcc.exe
+CC       = tcc.exe
+WINDRES  = void.exe
+OBJ      = sha256.o WLcrypto.o Zcipher.o aes256.o main.o
+LINKOBJ  = sha256.o WLcrypto.o Zcipher.o aes256.o main.o
+LIBS     = -L"D:/Compilers/C/Dev-TCC_5_5_3/tcc/lib" -s
+INCS     = -I"D:/Compilers/C/Dev-TCC_5_5_3/tcc/include"
+CXXINCS  =
+BIN      = WLcrypto.exe
+CXXFLAGS = $(CXXINCS) -v
+CFLAGS   = $(INCS) -v
+RM       = rm -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o $(BIN) $(LIBS)
+
+sha256.o: sha256.c
+	$(CC) -c sha256.c -o sha256.o $(CFLAGS)
+
+WLcrypto.o: WLcrypto.c
+	$(CC) -c WLcrypto.c -o WLcrypto.o $(CFLAGS)
+
+Zcipher.o: Zcipher.c
+	$(CPP) -c Zcipher.c -o Zcipher.o $(CXXFLAGS)
+
+aes256.o: aes256.c
+	$(CPP) -c aes256.c -o aes256.o $(CXXFLAGS)
+
+main.o: main.c
+	$(CPP) -c main.c -o main.o $(CXXFLAGS)

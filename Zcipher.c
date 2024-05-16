@@ -75,7 +75,7 @@ void decr(uint32_t *v)                                                       //
     while(i-- > 0)
     {
         y  = R(y - d, 21) + c;  
-        x  = R(x - b, 9) - a;
+        x  = R(x - b,  9) - a;
         b -= C0;  
         d  = R(d, 28);
         x -= y;
