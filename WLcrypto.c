@@ -23,8 +23,8 @@
 //  Например так: for(int i = 0; i < 32;i++) key[i] = i * 16 + i;
 uint8_t        key[32] ={ 19, 111,  42, 73,   4, 115,  36, 70,  8,  79, 
                          110,  11, 212, 15, 214,  91, 160, 17, 86, 199, 
-						  24,   1,  52, 93, 124, 250,  83, 27, 82,  29,
-						 230,  31};
+			  24,   1,  52, 93, 124, 250,  83, 27, 82,  29,
+						              230,  31};
 
 
          aes256_context    ctx;   //  Структурная переменная, в которой хранится ключ шифрования и его верcии для 
@@ -59,45 +59,45 @@ static void init()                                        //
 int WL_encAES256(char *psz)                               // 
 {	                                                      
 	
-	 int      i = 0,                                      //  Кол-во символов в строке (длина строки)
-	          x = 0,                                      //  Счётчик пакетов по 16 байт
-	        pak = 0;                                      //  Количество полных пакетов по 16 байт 
+    int      i = 0,                                       //  Кол-во символов в строке (длина строки)
+	     x = 0,                                       //  Счётчик пакетов по 16 байт
+	   pak = 0;                                       //  Количество полных пакетов по 16 байт 
 
 	  
-	 while(psz[++i]);	                                  //  Узнаём кол-во символов в строке
+    while(psz[++i]);	                                  //  Узнаём кол-во символов в строке
 	 
-	 if(    i  < 1)   return 0; 
-	 if(nInit == 0)     init();
+    if(    i  < 1)   return 0; 
+    if(nInit == 0)     init();
 	 
 	 
-	 if(i < 17) {                                         //  Если <= 128 бит, то передаём всю строку и выходим
+    if(i < 17) {                                          //  Если <= 128 бит, то передаём всю строку и выходим
 	 	
-	    memset(sz, 0,  16);	
-	 	memcpy(sz, psz, i);  aes256_encrypt_ecb(&ctx, sz); 
+	memset(sz, 0,  16);	
+	memcpy(sz, psz, i);  aes256_encrypt_ecb(&ctx, sz); 
 		
-		memcpy( psz   , &i,  4);
-		memcpy(&psz[4], sz, 16);           	     return i;     		                                                                                    
-	 }
+	memcpy( psz   , &i,  4);
+	memcpy(&psz[4], sz, 16);           	 return i;     		                                                                                    
+    }
 	 
-	 pak = i / 16;                                        //  Кол-во пакетов по 128 бит (16 байт)	
+    pak = i / 16;                                         //  Кол-во пакетов по 128 бит (16 байт)	
 
-	 memcpy(sz,  psz, 20);  aes256_encrypt_ecb(&ctx, sz); 	
+    memcpy(sz,  psz, 20);  aes256_encrypt_ecb(&ctx, sz); 	
 	
-	 for(x = 1; x <= pak; x++)
-	 {
+    for(x = 1; x <= pak; x++)
+    {
 	 
-	     memcpy(&psz[4 + (x-1)*16], sz, 16);
+	memcpy(&psz[4 + (x-1)*16], sz, 16);
 	 
-	     sz[0] = sz[16];
-	     sz[1] = sz[17];
-	     sz[2] = sz[18];
-	     sz[3] = sz[19];	     
+	sz[0] = sz[16];
+        sz[1] = sz[17];
+	sz[2] = sz[18];
+	sz[3] = sz[19];	     
 	 
-	     memcpy(&sz[4], &psz[4+x*16], 16); aes256_encrypt_ecb(&ctx, sz);  	     
+	memcpy(&sz[4], &psz[4+x*16], 16); aes256_encrypt_ecb(&ctx, sz);  	     
      }
      
      memcpy(&psz[4 + (x-1)*16], sz, 16);
-	 memcpy( psz ,    &i,   4);                            //  Поместим кол-во символов в начало зашифрованного пакета
+     memcpy( psz ,    &i,   4);                            //  Поместим кол-во символов в начало зашифрованного пакета
 	
 return i; 	
 }
@@ -110,29 +110,29 @@ return i;
 int WL_AES256dec(char *psz)                              // 
 {
 
-	 int   i    ,                                    // Узнаём кол-во символов в строке
-	       x = 0, 
-		 pak = 0;                                    //  Счётчик пакетов по 16 байт
+     int   i    ,                                        // Узнаём кол-во символов в строке
+	   x = 0, 
+	 pak = 0;                                        //  Счётчик пакетов по 16 байт
 	
-	 memcpy(&i, psz, 4);
+     memcpy(&i, psz, 4);
 	 
-	 if(    i  < 1)  return 0; 
+     if(    i  < 1)  return 0; 
      if(nInit == 0)    init();
 	 
-	 if(i < 17)                                //  Если <= 128 бит (меньше 17 байт), то передаём всю строку и выходим
-	 {	                                                                                         //memset(sz, 0,  16);	 	  	 
-	    memcpy( sz, &psz[4], 16);               aes256_decrypt_ecb(&ctx, sz);	   	    	    	
-	    memcpy(psz,   sz,     i);   
-		psz[i] = 0;    return i ; 
+     if(i < 17)                                //  Если <= 128 бит (меньше 17 байт), то передаём всю строку и выходим
+     {	                                                                                         //memset(sz, 0,  16);	 	  	 
+	memcpy( sz, &psz[4], 16);               aes256_decrypt_ecb(&ctx, sz);	   	    	    	
+	memcpy(psz,   sz,     i);   
+	psz[i] = 0;    return i ; 
      }
 
      pak = i/16;  if(i%16) pak ++; 
                                                                                         //  printf("pak = %d\n", pak);
-	 for(x = 0; x < pak; x++)
-	 {	 	                                                                                    // memset(sz, 0,  16);	 	
-	 	 memcpy(  sz, &psz[4 + x * 16], 16);    aes256_decrypt_ecb(&ctx, sz);
-	 	 memcpy(&psz[x * 16], sz,  16); 
-	 }
+     for(x = 0; x < pak; x++)
+     {	 	                                                                                // memset(sz, 0,  16);	 	
+	 memcpy(  sz, &psz[4 + x * 16], 16);    aes256_decrypt_ecb(&ctx, sz);
+	 memcpy(&psz[x * 16], sz,  16); 
+     }
 
      psz[i] = 0; 
 
@@ -196,12 +196,12 @@ int i;
 ////////////////////////////////////////////////////////////
 void dump(const char *s, uint8_t *buf, int size)          //
 { 
-	 printf(s);                   
+     printf(s);                   
 	
      for(i = 0; i < (size); i++) 
-	 { 
-	     printf("%02x ", buf[i]); 
-	 }   printf("\n"); 
+     { 
+	 printf("%02x ", buf[i]); 
+     }   printf("\n"); 
 }
 
 
@@ -210,12 +210,12 @@ void dump(const char *s, uint8_t *buf, int size)          //
 ////////////////////////////////////////////////////////////
 void dump1(const char *s, uint8_t *buf, int size)         //
 { 
-	 printf(s);                   
+     printf(s);                   
 	
      for(i = 0; i < (size); i++) 
-	 { 
-	     printf("%02x", buf[i]); 
-	 }   printf("\n"); 
+     { 
+	 printf("%02x", buf[i]); 
+     }   printf("\n"); 
 }
 
 

@@ -1,6 +1,9 @@
 
 
 
+//  Этот проект компилируется TCC 
+
+
 #include     <stdio.h>
 #include  "WLcrypto.h"    //#include  "WLaes256.h"  
 
@@ -30,34 +33,35 @@ char szWords[17][120] = {
 int main ()                                               //               
 {
 
-	int        res = 0,
-	             i = 0;
 
-	unsigned char *psZ;
+             int  res = 0,
+	            i = 0;
+
+    unsigned char    *psZ;
 	
-	printf("We print the length of the encrypted strings separated by commas:\n");
-	for(i = 0; i < 14; i++)
-	{                                                                    
-		if(i == 7) { key[4] = 81;  aes256_init(&ctx, key); }      //  We change one (4th) byte in the encryption key.
+    printf("We print the length of the encrypted strings separated by commas:\n");
+    for(i = 0; i < 14; i++)
+    {                                                                    
+	if(i == 7) { key[4] = 81;  aes256_init(&ctx, key); }      //  We change one (4th) byte in the encryption key.
 		                                                  //  Starting from the 7th line, the encryption key changes.		                                                                       		
-	    res = WL_encAES256(szWords[i]);
-	    printf("%d, ", res);                  //  We print, separated by commas, the length of the encrypted strings.
+	res = WL_encAES256(szWords[i]);
+	printf("%d, ", res);                  //  We print, separated by commas, the length of the encrypted strings.
     }   printf("\n");
 
-	for(i = 13; i > -1; i--)                             // In reverse order to change the encryption key less often.
-	{
+    for(i = 13; i > -1; i--)                             // In reverse order to change the encryption key less often.
+    {
 	   
-	    WL_AES256dec(szWords[i]);
-	    printf("%s\n", &szWords[i]);
+	WL_AES256dec(szWords[i]);
+        printf("%s\n", &szWords[i]);
 	                                                                             // Try commenting out the line below.
-	    if(i == 7) { key[4] = 4; aes256_init(&ctx, key); } // We change the encryption key back. As it was by default.
+	if(i == 7) { key[4] = 4; aes256_init(&ctx, key); } // We change the encryption key back. As it was by default.
     }                                                        
     
     
     printf("\n - - - - - - -       SHA-256 testing:\n");
 
 	
-	psZ = WL_sha256(    "abc", 3);  dump1("    abc: ", psZ, 32);
+    psZ = WL_sha256(    "abc", 3);  dump1("    abc: ", psZ, 32);
     psZ = WL_sha256("1234567", 7);  dump1("1234567: ", psZ, 32);
     psZ = WL_sha256(    "777", 3);  dump1("    777: ", psZ, 32);
 

@@ -18,9 +18,9 @@
 
 #ifdef __TINYC__      // *********************    For TCC Compiler    ***********************************
 
-    #ifndef uint8_t
-    #define uint8_t  unsigned char
-    #endif
+        #ifndef uint8_t
+        #define uint8_t  unsigned char
+        #endif
    
 	#ifndef uint32_t
 	#define uint32_t  unsigned int
@@ -31,9 +31,9 @@
 
 #ifdef __GNUC__      // (GCC) code for GNU C compiler 
 
-    #ifndef uint8_t
-    #define uint8_t  unsigned char
-    #endif
+        #ifndef uint8_t
+        #define uint8_t  unsigned char
+        #endif
    
 	#ifndef uint32_t
 	#define uint32_t  unsigned int

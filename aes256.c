@@ -138,7 +138,7 @@ static uint8_t gf_log(uint8_t x) // calculate logarithm gen 3
     if (x)
         for (i = 1, y = 1; i > 0; i++ )
         {
-            y ^= rj_xtime(y);
+            y  ^= rj_xtime(y);
             if (y == x) break;
         }
 
@@ -300,14 +300,14 @@ static void aes_expandEncKey(uint8_t *k, uint8_t *rc)
     *rc = rj_xtime( *rc);
 
     for(i = 4; i < 16; i += 4)  k[i] ^= k[i - 4],   k[i + 1] ^= k[i - 3],
-                                            k[i + 2] ^= k[i - 2], k[i + 3] ^= k[i - 1];
+                                        k[i + 2] ^= k[i - 2],   k[i + 3] ^= k[i - 1];
     k[16] ^= rj_sbox(k[12]);
     k[17] ^= rj_sbox(k[13]);
     k[18] ^= rj_sbox(k[14]);
     k[19] ^= rj_sbox(k[15]);
 
     for(i = 20; i < 32; i += 4) k[i] ^= k[i - 4],   k[i + 1] ^= k[i - 3],
-                                            k[i + 2] ^= k[i - 2], k[i + 3] ^= k[i - 1];
+                                        k[i + 2] ^= k[i - 2],   k[i + 3] ^= k[i - 1];
 
 } /* aes_expandEncKey */
 
@@ -317,7 +317,7 @@ void aes_expandDecKey(uint8_t *k, uint8_t *rc)
     uint8_t i;
 
     for(i = 28; i > 16; i -= 4) k[i + 0] ^= k[i - 4], k[i + 1] ^= k[i - 3],
-                                                k[i + 2] ^= k[i - 2], k[i + 3] ^= k[i - 1];
+                                            k[i + 2] ^= k[i - 2], k[i + 3] ^= k[i - 1];
 
     k[16] ^= rj_sbox(k[12]);
     k[17] ^= rj_sbox(k[13]);
@@ -325,7 +325,7 @@ void aes_expandDecKey(uint8_t *k, uint8_t *rc)
     k[19] ^= rj_sbox(k[15]);
 
     for(i = 12; i > 0; i -= 4)  k[i + 0] ^= k[i - 4], k[i + 1] ^= k[i - 3],
-                                                k[i + 2] ^= k[i - 2], k[i + 3] ^= k[i - 1];
+                                            k[i + 2] ^= k[i - 2], k[i + 3] ^= k[i - 1];
 
     *rc = FD(*rc);
     k[0] ^= rj_sbox(k[29]) ^ (*rc);
